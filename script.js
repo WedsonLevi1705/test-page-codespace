@@ -3,6 +3,10 @@ const campoNumero = document.querySelector("#numero");
 const campoResultado = document.querySelector("#resultado");
 const mensagem = document.querySelector("#mensagem");
 
+campoResultado.addEventListener("animationend", () => {
+	campoResultado.classList.remove("pulinho");
+});
+
 formulario.addEventListener("submit", (evento) => {
 	evento.preventDefault();
 	mensagem.textContent = "";
@@ -23,4 +27,7 @@ formulario.addEventListener("submit", (evento) => {
 	}
 
 	campoResultado.value = fatorial.toString();
+	campoResultado.classList.remove("pulinho");
+	void campoResultado.offsetWidth;
+	campoResultado.classList.add("pulinho");
 });

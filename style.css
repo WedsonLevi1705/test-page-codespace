@@ -25,6 +25,7 @@ main {
     border-radius: 8px;
     background: #fbfcf8;
     box-shadow: 0 18px 48px #253d3020;
+    animation: subir-translucido 1500ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 h1 {
@@ -69,10 +70,12 @@ button {
     color: #fff;
     font-weight: 700;
     cursor: pointer;
+    transition: background-color 480ms ease, transform 480ms ease;
 }
 
 button:hover {
     background: #1e4731;
+    transform: translateY(-2px);
 }
 
 button:focus-visible,
@@ -90,12 +93,61 @@ input:focus-visible {
     font-size: 1.15rem;
 }
 
+#resultado.pulinho {
+    animation: pequenos-pulos 480ms ease-out;
+}
+
 #mensagem {
     min-height: 1.5em;
     margin: 8px 0 0;
     color: #9a352e;
     font-family: Arial, sans-serif;
     font-size: 0.9rem;
+}
+
+@keyframes subir-translucido {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pequenos-pulos {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-5px);
+    }
+
+    70% {
+        transform: translateY(0);
+    }
+
+    85% {
+        transform: translateY(-2px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    main {
+        animation: none;
+    }
+
+    button {
+        transition: none;
+    }
+
+    #resultado.pulinho {
+        animation: none;
+    }
 }
 
 @media (max-width: 480px) {
