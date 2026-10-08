@@ -1,28 +1,152 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de fatorial</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0B0D10">
+    <meta name="description" content="Uma experiência interativa para explorar como o fatorial faz números crescerem.">
+    <title>Fatorial Lab — veja o número crescer</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='8' fill='%230B0D10'/%3E%3Cpath d='M12 12h6l6 18 6-18h6l-9 25h-6z' fill='%23C7F36B'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
 </head>
 <body>
-    <main>
-        <h1>Fatorial</h1>
-        <p>Informe um número inteiro não negativo para ver o cálculo.</p>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-        <form id="formulario-fatorial">
-            <label for="numero">Número</label>
-            <input id="numero" name="numero" type="number" min="0" step="1" required>
-            <button type="submit">Calcular fatorial</button>
-        </form>
-
-        <div class="resultado">
-            <label for="resultado">Resultado</label>
-            <input id="resultado" type="text" readonly placeholder="O cálculo aparecerá aqui" aria-live="polite">
-            <p id="mensagem" role="status"></p>
+    <header class="site-header">
+        <div class="page-shell header-inner">
+            <a class="wordmark" href="#topo" aria-label="Fatorial Lab, início">
+                FATORIAL <span>LAB</span>
+            </a>
+            <p class="header-note"><span class="status-mark" aria-hidden="true"></span> MATEMÁTICA <span class="multiply-mark">×</span> JAVASCRIPT</p>
         </div>
+    </header>
+
+    <main id="conteudo" class="page-shell">
+        <section id="topo" class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow"><span>01</span> UM EXPERIMENTO NUMÉRICO</p>
+                <h1 id="hero-title">VEJA<br>O NÚMERO<br><span>CRESCER.</span></h1>
+                <p class="hero-description">Uma operação simples pode produzir números absurdamente grandes.</p>
+            </div>
+            <div class="hero-equation" aria-hidden="true">
+                <p class="equation-caption">UMA DEFINIÇÃO, MUITAS ORDENS DE GRANDEZA</p>
+                <p class="equation-formula">n! = n × (n − 1)!</p>
+                <div class="equation-sequence"><span>03</span><span>06</span><span>24</span><span>120</span><span>720</span></div>
+                <p class="equation-footnote">CADA PASSO MULTIPLICA TUDO O QUE VEIO ANTES.</p>
+            </div>
+            <span class="hero-index" aria-hidden="true">Nº 001 — 500</span>
+        </section>
+
+        <section id="calculadora" class="lab-section" data-state="idle" aria-labelledby="lab-title" aria-busy="false">
+            <div class="section-heading">
+                <p class="eyebrow"><span>02</span> EXPLORE O FATORIAL</p>
+                <h2 id="lab-title">Uma entrada.<br>Uma nova escala.</h2>
+            </div>
+
+            <div class="lab-layout">
+                <div class="lab-controls">
+                    <form id="factorial-form" novalidate>
+                        <label for="number-input">Digite um número</label>
+                        <div class="input-row">
+                            <input id="number-input" name="number" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="Ex.: 7" aria-describedby="number-hint number-error" aria-errormessage="number-error" required>
+                            <button class="primary-button" type="submit"><span>Calcular</span><span aria-hidden="true">→</span></button>
+                        </div>
+                        <div class="field-notes">
+                            <p id="number-hint" class="field-hint">Digite um inteiro entre 0 e 500.</p>
+                            <p id="number-error" class="error-message" role="alert" hidden></p>
+                        </div>
+                    </form>
+
+                    <p id="calculation-status" class="calculation-status" role="status" aria-live="polite" aria-atomic="true">Aguardando um número.</p>
+
+                    <div id="result-panel" class="result-panel" data-size="small">
+                        <div class="result-heading">
+                            <p class="eyebrow">RESULTADO EXATO</p>
+                            <p id="result-digits" class="result-digits">—</p>
+                        </div>
+                        <h3 id="result-factorial" class="result-factorial">n!</h3>
+                        <output id="result-number" class="result-number" tabindex="0" aria-live="off" aria-label="Resultado exato do fatorial">Aguardando entrada</output>
+                        <div class="result-actions">
+                            <button id="copy-button" class="copy-button" type="button" hidden>
+                                <span>Copiar resultado</span>
+                            </button>
+                            <p id="copy-feedback" class="copy-feedback" role="status" aria-live="polite"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expression-panel">
+                    <div class="panel-heading">
+                        <p class="eyebrow">CONSTRUÇÃO DO CÁLCULO</p>
+                        <p id="expression-meta" class="mono-note">0 TERMOS</p>
+                    </div>
+                    <p id="expression-output" class="expression-output">A sequência aparece aqui.</p>
+                    <p id="expression-note" class="expression-note">Cada fator leva o resultado um passo adiante.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="construcao" class="content-section construction-section" aria-labelledby="construction-title">
+            <div class="section-heading section-heading-inline">
+                <p class="eyebrow"><span>03</span> PASSO A PASSO</p>
+                <h2 id="construction-title">Como o cálculo nasce</h2>
+                <p class="section-intro">O resultado se forma em sequência. Explore cada etapa para ver a multiplicação acumulada.</p>
+            </div>
+            <div class="construction-content">
+                <ol id="construction-steps" class="construction-steps" aria-label="Etapas do cálculo"></ol>
+                <p id="construction-placeholder" class="section-placeholder">Calcule um número de 0 a 12 para acompanhar os fatores.</p>
+                <div id="construction-summary" class="construction-summary" hidden>
+                    <p id="construction-summary-expression" class="summary-expression"></p>
+                    <p id="construction-summary-note" class="section-placeholder"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="crescimento" class="content-section growth-section" aria-labelledby="growth-title">
+            <div class="section-heading section-heading-inline">
+                <p class="eyebrow"><span>04</span> EM PERSPECTIVA</p>
+                <h2 id="growth-title">O fatorial cresce rápido.</h2>
+                <p class="section-intro">O comprimento do resultado revela a velocidade. A escala das barras é logarítmica.</p>
+            </div>
+            <div id="growth-list" class="growth-list" aria-label="Quantidade de dígitos em fatoriais selecionados"></div>
+            <p class="growth-footnote">Mesmo uma pequena mudança na entrada transforma a ordem de grandeza.</p>
+        </section>
+
+        <section id="curiosidades" class="content-section facts-section" aria-labelledby="facts-title">
+            <div class="section-heading section-heading-inline">
+                <p class="eyebrow"><span>05</span> NOTAS DE RODAPÉ</p>
+                <h2 id="facts-title">Alguns pontos de referência.</h2>
+            </div>
+            <div class="fact-list">
+                <article class="fact-item">
+                    <p class="fact-number">0!</p>
+                    <p class="fact-value">1</p>
+                    <p class="fact-caption">Por definição, o fatorial de zero é um.</p>
+                </article>
+                <article class="fact-item">
+                    <p class="fact-number">10!</p>
+                    <p class="fact-value">3.628.800</p>
+                    <p class="fact-caption">Dez fatores já produzem sete dígitos.</p>
+                </article>
+                <article class="fact-item">
+                    <p class="fact-number">20!</p>
+                    <p class="fact-value">2.432.902.008.176.640.000</p>
+                    <p class="fact-caption">Dezenove dígitos em apenas vinte fatores.</p>
+                </article>
+            </div>
+        </section>
     </main>
+
+    <footer class="site-footer">
+        <div class="page-shell footer-inner">
+            <a class="wordmark" href="#topo">FATORIAL <span>LAB</span></a>
+            <p class="footer-stack">HTML · CSS · JAVASCRIPT</p>
+            <p class="footer-description">Uma pequena experiência sobre números que crescem rápido.</p>
+        </div>
+    </footer>
 </body>
 </html>
