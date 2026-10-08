@@ -17,17 +17,10 @@ formulario.addEventListener("submit", (evento) => {
 	}
 
 	let fatorial = 1n;
-	const fatores = [];
 
 	for (let atual = numero; atual > 1; atual -= 1) {
 		fatorial *= BigInt(atual);
-		fatores.push(atual);
 	}
 
-	if (numero > 1) {
-		fatores.push(1);
-	}
-
-	const expressao = fatores.length > 0 ? fatores.join(" x ") : "1";
-	campoResultado.value = `${numero}! = ${expressao} = ${fatorial}`;
+	campoResultado.value = fatorial.toString();
 });
