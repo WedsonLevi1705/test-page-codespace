@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Calculadora de fatorial</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    
+    <main>
+        <h1>Fatorial</h1>
+        <p>Informe um número inteiro não negativo para ver o cálculo.</p>
+
+        <form id="formulario-fatorial">
+            <label for="numero">Número</label>
+            <input id="numero" name="numero" type="number" min="0" step="1" required>
+            <button type="submit">Calcular fatorial</button>
+        </form>
+
+        <div class="resultado">
+            <label for="resultado">Resultado</label>
+            <input id="resultado" type="text" readonly placeholder="O cálculo aparecerá aqui" aria-live="polite">
+            <p id="mensagem" role="status"></p>
+        </div>
+    </main>
 </body>
 </html>
